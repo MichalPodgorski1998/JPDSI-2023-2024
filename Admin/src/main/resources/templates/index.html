@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="~{fragments/head-fragment :: head-fragment}"></head>
+
 <body>
 
 Siema, weź sie wyloguj! xD
 <form th:action="@{/logout}" method="post">
-    <!-- Możesz dodać tutaj dodatkowe pola formularza, jeśli są potrzebne -->
     <button type="submit" class="btn btn-primary">Logout</button>
 </form>
+
+<div th:replace="~{fragments/script :: script}"></div>
 </body>
 </html>

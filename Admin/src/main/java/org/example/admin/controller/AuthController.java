@@ -28,13 +28,17 @@ public class AuthController {
 
     @RequestMapping("/login")
     public String loginForm(Model model) {
-        model.addAttribute("title", "Login Page");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/index";
+        }
+        model.addAttribute("title", "Strona logowania");
         return "login";
     }
 
     @RequestMapping("/index")
     public String index(Model model) {
-        model.addAttribute("title", "Home Page");
+        model.addAttribute("title", "Strona główna");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "redirect:/login";
@@ -44,7 +48,11 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("title", "Register");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/index";
+        }
+        model.addAttribute("title", "Strona rejestracji");
         model.addAttribute("adminDto", new AdminDto());
         return "register";
     }
