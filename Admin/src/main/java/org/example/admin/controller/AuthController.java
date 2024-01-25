@@ -71,7 +71,7 @@ public class AuthController {
                 adminDto.setPassword(passwordEncoder.encode(adminDto.getPassword()));
                 adminService.save(adminDto);
                 System.out.println("success");
-                model.addAttribute("success", "Rejestracja przebiegła pomyślnie");
+                model.addAttribute("success", "Rejestracja przebiegła pomyślnie. Możesz teraz zalogować się na swoje konto!");
                 model.addAttribute("adminDto", adminDto);
 
             } else {
