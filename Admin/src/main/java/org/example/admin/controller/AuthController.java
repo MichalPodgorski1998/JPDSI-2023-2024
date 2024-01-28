@@ -30,7 +30,7 @@ public class AuthController {
     public String loginForm(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/index";
+            return "redirect:/index2";
         }
         model.addAttribute("title", "Strona logowania");
         return "login";
@@ -43,7 +43,7 @@ public class AuthController {
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "redirect:/login";
         }
-        return "index";
+        return "index2";
     }
 
     @GetMapping("/register")
