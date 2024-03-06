@@ -26,8 +26,8 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <form class="form-horizontal" th:action="@{/saveProduct}" method="post" enctype="multipart/form-data" th:object = "${product}">
-
+                <form class="form-horizontal" th:action="@{/updateProduct/{id}(id = ${productDto.id})}" method="post" th:object = "${productDto}"
+                      enctype="multipart/form-data">
                         <!-- Text input-->
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="productName">Nazwa produktu</label>
@@ -38,17 +38,16 @@
 
                         <!-- Text input-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="description">Opis produktu</label>
+                            <label class="col-md-4 control-label" for="description">PRODUCT DESCRIPTION</label>
                             <div class="col-md-4">
-                                <textarea id="description" th:field = "*{description}" name="description" class="form-control input-md" required="" type="text"></textarea>
+                                <input id="description" th:field = "*{description}" name="description" class="form-control input-md" required="" type="text">
                             </div>
                         </div>
 
-                        <!-- Select Basic -->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="productCategories">Gatunek muzyczny</label>
+                            <label class="col-md-4 control-label" for="product_categories">PRODUCT CATEGORY</label>
                             <div class="col-md-4">
-                                <select id="productCategories" th:field = "*{category}" name="productCategories" class="form-control">
+                                <select id="product_categories" th:field = "*{category.id}" name="product_categories" class="form-control" required>
                                     <option th:value = "null">-SELECT-</option>
                                     <option th:each = "category : ${categories}"
                                             th:value = "${category.id}"
@@ -90,15 +89,70 @@
                             </div>
                         </div>
 
-                        <!-- File Button -->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="image">Zdjęcie produktu</label>
-                            <div class="col-md-4">
-                                <input id="image" name="imageProduct" class="input-file" type="file">
+
+                            <div class="form-group">
+                                <label class="col-md-4 col-form-label" for="image">Aktualne zdjęcie produktu</label>
+                                <div class="col-md-8">
+                                    <!-- Image display section -->
+                                    <img style="max-height: 400px" id="preview-image" class="zoom-img img-fluid" th:if="${productDto.image != null}" th:src="'data:image/jpeg;base64,' + ${productDto.image}"
+                                         alt="Product Image">
+                                    <img style="max-height: 400px" id="default-image" class="zoom-img img-fluid" th:if="${productDto.image == null}"
+                                         src="https://media.istockphoto.com/id/1394758946/vector/no-image-raster-symbol-missing-available-icon-no-gallery-for-this-moment-placeholder.jpg?s=170667a&w=0&k=20&c=HMFTtins81JmJWSrFbjs-xNL_W0KXonnGwCWJo5IPp0="
+                                         alt="Default Image">
+                                    <br>
+                                </div>
                             </div>
+
+
+<!--                            <div class="form-group">-->
+
+<!--                                <label class="col-md-4 col-form-label" for="image">Wybierz nowe zdjęcie produktu</label>-->
+
+<!--                                <div class="col-md-8">-->
+<!--                                    <img id="image-preview" style="max-height: 400px; display: none;" class="zoom-img img-fluid">-->
+<!--                                    <br>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-md-4">-->
+<!--                                    <div class="custom-file">-->
+<!--                                        <input id="image" name="imageProduct" class="custom-file-input" type="file" accept="image/*" onchange="previewImage(event)">-->
+<!--                                        <label id="image-label" class="custom-file-label" for="image">Wybierz plik</label>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+                            <!-- Text input-->
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 col-form-label" for="image">Wybierz nowe zdjęcie produktu</label>
+
+                                <div class="col-md-8">
+                                    <!-- Podgląd istniejącego obrazu -->
+                                    <img id="image-preview" style="max-height: 400px; display: none;" class="zoom-img img-fluid"
+                                         th:if="${productDto.image != null}"
+                                         th:src="'data:image/jpeg;base64,' + ${productDto.image}"
+                                         alt="Product Image">
+                                    <br>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="custom-file">
+                                        <input id="image" name="imageProduct" class="custom-file-input" type="file"
+                                               accept="image/*" onchange="previewImage(event)">
+                                        <label id="image-label" class="custom-file-label" for="image">Wybierz
+                                            plik</label>
+                                        <!-- Dodajemy ukryte pole input, aby przekazać informację o obecnym obrazie -->
+                                        <input type="hidden" name="currentImage" th:if="${productDto.image != null}"
+                                               th:value="${productDto.image}">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Save</button>
                 </form>
 
             </div>
@@ -124,7 +178,23 @@
 
 
 <div th:replace="~{fragments/script :: script}"></div>
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function () {
+            var img = document.getElementById('image-preview');
+            img.src = reader.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 
+    document.getElementById('image').addEventListener('change', function(event) {
+        var fileName = event.target.files[0].name;
+        document.getElementById('image-label').innerText = fileName;
+    });
+</script>
 </body>
 
 </html>

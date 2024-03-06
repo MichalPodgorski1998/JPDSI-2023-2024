@@ -9,21 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "products", uniqueConstraints = @UniqueConstraint(columnNames = {"productName", "productImage"}))
+@Table(name = "products", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "productImage"}))
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long id;
-    private String productName;
-    private String productDescription;
-    private int productQuantity;
-    private double productPrice;
+
+    private String title;
+    private String description;
+    private String artistName;
+    private String albumTitle;
+    private double price;
+    private int quantity;
+
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
-    private String productImage;
+    private String image;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 }
