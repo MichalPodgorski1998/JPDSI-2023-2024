@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{fragments/head-fragment :: head-fragment}"></head>
+
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="~{fragments/sidebar-fragment :: sidebar-fragment}"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="~{fragments/topbar-fragment :: topbar-fragment}"></nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <form class="form-horizontal" th:action="@{/saveProduct}" method="post" enctype="multipart/form-data" th:object = "${product}">
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="productName">Nazwa produktu</label>
+                            <div class="col-md-4">
+                                <input id="productName" th:field = "*{title}" name="productName" class="form-control input-md" required="" type="text">
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="description">Opis produktu</label>
+                            <div class="col-md-4">
+                                <textarea id="description" th:field = "*{description}" name="description" class="form-control input-md" required="" type="text"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Select Basic -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="productCategories">Gatunek muzyczny</label>
+                            <div class="col-md-4">
+                                <select id="productCategories" th:field = "*{category}" name="productCategories" class="form-control">
+                                    <option th:value = "null">-SELECT-</option>
+                                    <option th:each = "category : ${categories}"
+                                            th:value = "${category.id}"
+                                            th:text = "${category.categoryName}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="artistName">Wykonawca</label>
+                            <div class="col-md-4">
+                                <input id="artistName" th:field = "*{artistName}" name="artistName" class="form-control input-md" required="" type="text">
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="albumName">Nazwa albumu</label>
+                            <div class="col-md-4">
+                                <input id="albumName" th:field = "*{albumTitle}" name="albumName" class="form-control input-md" required="" type="text">
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="price">Cena</label>
+                            <div class="col-md-4">
+                                <input id="price" th:field ="*{price}" name="price" class="form-control input-md" required="" type="text">
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="quantity">Ilość</label>
+                            <div class="col-md-4">
+                                <input id="quantity" th:field ="*{quantity}" name="quantity" class="form-control input-md" required="" type="text">
+                            </div>
+                        </div>
+
+                        <!-- File Button -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="image">Zdjęcie produktu</label>
+                            <div class="col-md-4">
+                                <input id="image" name="imageProduct" class="input-file" type="file">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer th:replace="~{fragments/footer-fragment :: footer-fragment}"></footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<div th:replace="~{fragments/script :: script}"></div>
+
+</body>
+
+</html>
