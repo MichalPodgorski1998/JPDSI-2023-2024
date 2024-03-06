@@ -1,5 +1,7 @@
 package org.example.admin.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.ProductDto;
 import org.example.library.model.Category;
 import org.example.library.model.Product;
@@ -7,6 +9,7 @@ import org.example.library.service.CategoryService;
 import org.example.library.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +69,7 @@ public class ProductController {
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Nie udało się dodać!");
         }
-        return "redirect:/products";
+        return "redirect:/products/0";
     }
 
     @GetMapping("/updateProduct/{id}")
@@ -118,7 +121,7 @@ public String updateProduct(@PathVariable("id") Long id,
         e.printStackTrace();
         attributes.addFlashAttribute("error", "Nie udało się zaktualizować produktu!");
     }
-    return "redirect:/products";
+    return "redirect:/products/0";
 }
 
     @RequestMapping(value = "/delete-product/{id}", method = {RequestMethod.GET, RequestMethod.DELETE})
@@ -130,9 +133,61 @@ public String updateProduct(@PathVariable("id") Long id,
             e1.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Duplicate name of category, please check again!");
         }
-        return "redirect:/products";
+        return "redirect:/products/0";
     }
 
 
-}
+    @GetMapping("/products/{pageNo}")
+    public String allProducts(@PathVariable("pageNo") int pageNo,
+                              Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        Page<Product> products = productService.pageProducts(pageNo);
+        model.addAttribute("title", "Produkty");
+        model.addAttribute("size", products.getSize());
+        model.addAttribute("products", products);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", products.getTotalPages());
+        return "products";
+    }
 
+//    @GetMapping("/search-result/{pageNo}")
+//    public String searchProduct(@PathVariable("pageNo") int pageNo,
+//                                @RequestParam(value = "keyword") String keyword,
+//                                Model model, Principal principal) {
+//        if (principal == null) {
+//            return "redirect:/login";
+//        }
+//
+//        Page<Product> products = productService.searchProducts(pageNo, keyword);
+//        model.addAttribute("title", "Wynik wyszukanych produktów");
+//        model.addAttribute("size", products.getSize());
+//        model.addAttribute("products", products);
+//        model.addAttribute("currentPage", pageNo);
+//        model.addAttribute("totalPages", products.getTotalPages());
+//        return "products-result";
+//    }
+@GetMapping("/search-result/{pageNo}")
+public String searchProduct(@PathVariable("pageNo") int pageNo,
+                            @RequestParam(value = "keyword") String keyword,
+                            Model model, Principal principal, HttpSession session) {
+    if (principal == null) {
+        return "redirect:/login";
+    }
+
+    if (keyword == null || keyword.isEmpty()) {
+        return "redirect:/products/0";
+    }
+    // Ustawienie wartości keyword w sesji
+    session.setAttribute("keyword", keyword);
+
+    Page<Product> products = productService.searchProducts(pageNo, keyword);
+    model.addAttribute("title", "Wynik wyszukanych produktów");
+    model.addAttribute("size", products.getSize());
+    model.addAttribute("products", products);
+    model.addAttribute("currentPage", pageNo);
+    model.addAttribute("totalPages", products.getTotalPages());
+    return "products-result";
+}
+}

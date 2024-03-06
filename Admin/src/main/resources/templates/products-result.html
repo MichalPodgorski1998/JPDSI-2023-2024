@@ -13,6 +13,7 @@
     .zoom-img:hover {
         transform: scale(4) translateX(-10px);
     }
+
 </style>
 <!-- Page Wrapper -->
 <div id="wrapper">
@@ -36,20 +37,32 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-<!--                <div th:if="${size == 0}">Brak produktów</div>-->
+
+                <div th:if="${size == 0}">Brak produktów</div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
                             <h5 class="m-0 font-weight-bold text-primary">Produkty</h5>
-<!--                            <button type="button" class="btn btn-primary btn-icon-split" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">-->
-<!--                                <span class="icon text-white-50">-->
-<!--                                    <i class="fas fa-plus"></i>-->
-<!--                                </span>-->
-<!--                                <span class="text">Dodaj produkt</span>-->
-<!--                            </button>-->
-                            <a th:href="@{/addProduct}" class = "btn btn-primary">Dodaj Produkt</a>
+                            <div class="d-flex align-items-center">
+                                <div class="search-container mr-3 ml-auto">
+                                    <form id="searchForm" th:action="@{/search-result/0}" method="get"  class="d-none d-sm-inline-block form-inline my-2 my-lg-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control bg-light border-primary small" placeholder="Search for..."
+                                                   aria-label="Search" name="keyword" aria-describedby="basic-addon2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit">
+                                                    <i class="fas fa-search fa-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <a th:href="@{/addProduct}" class="btn btn-primary mr-2">Dodaj Produkt</a>
+                            </div>
                         </div>
+
+
 
                         <div th:if = "${success}" class="text-center alert alert-success">
                             <p th:text="${success}"></p>
@@ -127,23 +140,43 @@
 
                                 </table>
 
-                                <nav aria-label="...">
-                                    <ul class="pagination" th:if="${totalPages > 1}">
-                                        <li th:if= "${currentPage != 0}" class="page-item ">
-                                            <a th:href = "@{'/products/' + ${currentPage - 1}}" class="page-link">Previous</a>
-                                        </li >
+<!--                                <nav aria-label="...">-->
+<!--                                    <ul class="pagination" th:if="${totalPages > 1}">-->
+<!--                                        <li th:if= "${currentPage != 0}" class="page-item ">-->
+<!--                                            <a th:href = "@{'/products/' + ${currentPage - 1}}" class="page-link">Previous</a>-->
+<!--                                        </li >-->
 
-                                        <li th:each = "i : ${#numbers.sequence(1, totalPages)}" th:classappend = "${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                                            <a th:href = "@{'/products/' + ${i - 1}}" class="page-link" href="#">
-                                                <span th:text = "${i}"></span>
-                                            </a>
-                                        </li>
+<!--                                        <li th:each = "i : ${#numbers.sequence(1, totalPages)}" th:classappend = "${currentPage == i - 1 ? 'active' : ''}" class="page-item">-->
+<!--                                            <a th:href = "@{'/products/' + ${i - 1}}" class="page-link" href="#">-->
+<!--                                                <span th:text = "${i}"></span>-->
+<!--                                            </a>-->
+<!--                                        </li>-->
 
-                                        <li th:if = "${currentPage + 1 != totalPages}" class="page-item">
-                                            <a th:href = "@{'/products/' + ${currentPage + 1}}" class="page-link" href="#">Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
+<!--                                        <li th:if = "${currentPage + 1 != totalPages}" class="page-item">-->
+<!--                                            <a th:href = "@{'/search-result/' + ${currentPage + 1}} + '?keyword=' + ${keyword}" class="page-link" href="#">Next</a>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </nav>-->
+
+                            <nav aria-label="...">
+                                <ul class="pagination" th:if="${totalPages > 1}">
+                                    <li th:if="${currentPage != 0}" class="page-item">
+                                        <a th:href="@{'/search-result/' + ${currentPage} + '?keyword=' + ${session.keyword}}" class="page-link">Previous</a>
+                                    </li>
+
+                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                        <a th:href="@{'/search-result/' + ${i} + '?keyword=' + ${session.keyword}}" class="page-link" href="#">
+                                            <span th:text="${i + 1}"></span>
+                                        </a>
+                                    </li>
+
+                                    <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                                        <a th:href="@{'/search-result/' + (${currentPage} + 1) + '?keyword=' + ${session.keyword}}" class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+
                                 <br>
                             </div>
 
@@ -175,6 +208,11 @@
 
 
 <div th:replace="~{/fragments/script :: script}"></div>
+<script>
+    // document.getElementById('clearSearch').addEventListener('click', function() {
+    //     window.location.href = 'redirect:/products/0'; // Przekierowanie na stronę produków
+    // });
+</script>
 <script th:src="@{/js/categories.js}"></script>
 
 

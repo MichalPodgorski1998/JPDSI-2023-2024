@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:replace="~{fragments/head-fragment :: head-fragment}"></head>
+<head th:replace="~{/fragments/head-fragment :: head-fragment}"></head>
 
 <body id="page-top">
 <style>
@@ -18,7 +18,9 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul th:replace="~{fragments/sidebar-fragment :: sidebar-fragment}"></ul>
+    <ul th:replace="~{/fragments/sidebar-fragment :: sidebar-fragment}"></ul>
+<!--    <ul th:replace = "~{fragments::sidebar}">-->
+    </ul>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -28,25 +30,34 @@
         <div id="content">
 
             <!-- Topbar -->
-            <nav th:replace="~{fragments/topbar-fragment :: topbar-fragment}"></nav>
+            <nav th:replace="~{/fragments/topbar-fragment :: topbar-fragment}"></nav>
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-<!--                <div th:if="${size == 0}">Brak produktów</div>-->
+                <div th:if="${size == 0}">Brak produktów</div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
                             <h5 class="m-0 font-weight-bold text-primary">Produkty</h5>
-<!--                            <button type="button" class="btn btn-primary btn-icon-split" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">-->
-<!--                                <span class="icon text-white-50">-->
-<!--                                    <i class="fas fa-plus"></i>-->
-<!--                                </span>-->
-<!--                                <span class="text">Dodaj produkt</span>-->
-<!--                            </button>-->
-                            <a th:href="@{/addProduct}" class = "btn btn-primary">Dodaj Produkt</a>
+                            <div class="d-flex align-items-center">
+                                <div class="search-container mr-3 ml-auto">
+                                    <form id="searchForm" th:action="@{/search-result/0}" method="get"  class="d-none d-sm-inline-block form-inline my-2 my-lg-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control bg-light border-primary small" placeholder="Search for..."
+                                                   aria-label="Search" name="keyword" aria-describedby="basic-addon2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit">
+                                                    <i class="fas fa-search fa-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <a th:href="@{/addProduct}" class="btn btn-primary mr-2">Dodaj Produkt</a>
+                            </div>
                         </div>
 
                         <div th:if = "${success}" class="text-center alert alert-success">
@@ -112,7 +123,7 @@
                                                             Czy na pewno chcesz usunąć ten produkt??
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a th:href="@{'/delete-product/' + ${product.id}}" class="btn btn-primary">Tak, usuń</a>
+                                                            <a th:href="@{'/delete-product/' + ${product.id} + '?pageNo=' + ${currentPage}}" class="btn btn-danger">Tak, usuń</a>
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
                                                         </div>
                                                     </div>
@@ -124,8 +135,28 @@
                                     </tbody>
 
                                 </table>
+
+                                <nav aria-label="...">
+                                    <ul class="pagination" th:if="${totalPages > 1}">
+                                        <li th:if= "${currentPage != 0}" class="page-item ">
+                                            <a th:href = "@{'/products/' + ${currentPage - 1}}" class="page-link">Previous</a>
+                                        </li >
+
+                                        <li th:each = "i : ${#numbers.sequence(1, totalPages)}" th:classappend = "${currentPage == i - 1 ? 'active' : ''}" class="page-item">
+                                            <a th:href = "@{'/products/' + ${i - 1}}" class="page-link" href="#">
+                                                <span th:text = "${i}"></span>
+                                            </a>
+                                        </li>
+
+                                        <li th:if = "${currentPage + 1 != totalPages}" class="page-item">
+                                            <a th:href = "@{'/products/' + ${currentPage + 1}}" class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
                                 <br>
                             </div>
+
+
                         </div>
 
                 </div>
@@ -137,7 +168,7 @@
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer th:replace="~{fragments/footer-fragment :: footer-fragment}"></footer>
+        <footer th:replace="~{/fragments/footer-fragment :: footer-fragment}"></footer>
         <!-- End of Footer -->
 
     </div>
@@ -152,7 +183,7 @@
 </a>
 
 
-<div th:replace="~{fragments/script :: script}"></div>
+<div th:replace="~{/fragments/script :: script}"></div>
 <script th:src="@{/js/categories.js}"></script>
 
 

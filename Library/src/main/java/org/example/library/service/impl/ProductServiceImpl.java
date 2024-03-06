@@ -6,6 +6,9 @@ import org.example.library.repository.ProductRepository;
 import org.example.library.service.ProductService;
 import org.example.library.utils.ImageUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -113,6 +116,21 @@ public class ProductServiceImpl implements ProductService {
         productDto.setImage(product.getImage());
         return productDto;
     }
+
+    @Override
+    public Page<Product> searchProducts(int pageNo, String keywords) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        Page<Product> products = productRepository.searchProducts(keywords, pageable);
+        return products;
+    }
+
+    @Override
+    public Page<Product> pageProducts(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        Page<Product> productPages = productRepository.pageProducts(pageable);
+        return productPages;
+    }
+
     @Override
     public Product updateWithoutImage(ProductDto productDto) {
         try {
@@ -133,6 +151,7 @@ public class ProductServiceImpl implements ProductService {
         }
         return null;
     }
+
     @Override
     public void deleteById(Long id) {
         productRepository.deleteById(id);

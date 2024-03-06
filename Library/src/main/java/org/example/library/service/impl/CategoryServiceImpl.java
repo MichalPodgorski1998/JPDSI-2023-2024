@@ -1,10 +1,14 @@
 package org.example.library.service.impl;
 
 import org.example.library.model.Category;
+import org.example.library.model.Product;
 import org.example.library.repository.CategoryRepository;
 import org.example.library.repository.ProductRepository;
 import org.example.library.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,8 +46,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryUpdate.setCategoryName(category.getCategoryName());
         return categoryRepository.save(category);
     }
-
-
 
 
     @Override
