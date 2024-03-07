@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Basic -->
+
+<head th:replace="~{fragments/head-fragment :: head-fragment}"></head>
+
+
+<body>
+<header th:replace="~{fragments/header-fragment :: header-fragment}"></header>
+
+
+<!-- Start Shop Page  -->
+<div class="shop-box-inner">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+                <div class="right-product-box">
+
+                    <div class="product-item-filter row">
+                        <div class="col-12 col-sm-8 text-center text-sm-left">
+                            <div class="toolbar-sorter-right">
+                                <span>Sort by </span>
+                                <select id="basic" class="selectpicker show-tick form-control" data-placeholder="$ USD">
+                                    <option data-display="Select">Nothing</option>
+                                    <option value="2">High Price → High Price</option>
+                                    <option value="3">Low Price → High Price</option>
+                                    <option value="4">Best Selling</option>
+                                </select>
+                            </div>
+                            <p>Showing all results</p>
+                        </div>
+                        <div class="col-12 col-sm-4 text-center text-sm-right">
+                            <ul class="nav nav-tabs ml-auto">
+                                <li>
+                                    <a class="nav-link active" href="#grid-view" data-toggle="tab"> <i class="fa fa-th"></i> </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#list-view" data-toggle="tab"> <i class="fa fa-list-ul"></i> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="title-all text-center">
+                                    <h1 th:text="${category.categoryName}"></h1>
+                                    <p>Mamy najlepszą muzykę w okolicy!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="special-menu text-center">
+                                    <div class="button-group filter-button-group">
+                                        <button class="active" data-filter="*">All</button>
+                                        <button data-filter=".best-seller">Best seller</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row special-list">
+                            <div class="col-lg-3 col-md-6 special-grid best-seller" th:each="product : ${products}" >
+                            <div class="products-single fix">
+                                    <div class="box-img-hover">
+                                        <img style="max-height: 250px" th:if="${product.image != null}" th:src="'data:image/jpeg;base64,' + ${product.image}">
+                                        <img style="max-height: 250px" th:if="${product.image == null}" th:src="'https://media.istockphoto.com/id/1394758946/vector/no-image-raster-symbol-missing-available-icon-no-gallery-for-this-moment-placeholder.jpg?s=170667a&w=0&k=20&c=HMFTtins81JmJWSrFbjs-xNL_W0KXonnGwCWJo5IPp0='">
+
+                                        <div class="mask-icon">
+                                            <ul>
+                                                <li><a th:href="@{/find-product/{id}(id = ${product.id})}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                            </ul>
+                                            <a class="cart" href="#">Dodaj do koszyka</a>
+                                        </div>
+                                    </div>
+                                    <div class="why-text">
+                                        <h4 th:text="${product.artistName} + ' - ' + ${product.albumTitle}"></h4>
+                                        <h5 th:text="${product.price} + ' zł'"></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
+                <div class="product-categori">
+                    <div class="search-product">
+                        <form action="#">
+                            <input class="form-control" placeholder="Search here..." type="text">
+                            <button type="submit"> <i class="fa fa-search"></i> </button>
+                        </form>
+                    </div>
+                    <div class="filter-sidebar-left">
+                        <div class="title-left">
+                            <h3>Categories</h3>
+                        </div>
+                        <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men" data-children=".sub-men" th:each="category : ${categories}">
+                            <a href="#" class="list-group-item list-group-item-action"> [[${category.categoryName}]] <small class="text-muted">([[${category.productSize}]])</small></a>
+                        </div>
+                    </div>
+                    <div class="filter-price-left">
+                        <div class="title-left">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Shop Page -->
+
+
+
+<div th:replace="~{fragments/script :: script}"></div>
+
+</body>
+
+</html>

@@ -143,7 +143,7 @@ public String updateProduct(@PathVariable("id") Long id,
         if (principal == null) {
             return "redirect:/login";
         }
-        Page<Product> products = productService.pageProducts(pageNo);
+        Page<ProductDto> products = productService.pageProducts(pageNo);
         model.addAttribute("title", "Produkty");
         model.addAttribute("size", products.getSize());
         model.addAttribute("products", products);
@@ -182,7 +182,7 @@ public String searchProduct(@PathVariable("pageNo") int pageNo,
     // Ustawienie wartości keyword w sesji
     session.setAttribute("keyword", keyword);
 
-    Page<Product> products = productService.searchProducts(pageNo, keyword);
+    Page<ProductDto> products = productService.searchProducts(pageNo, keyword);
     model.addAttribute("title", "Wynik wyszukanych produktów");
     model.addAttribute("size", products.getSize());
     model.addAttribute("products", products);

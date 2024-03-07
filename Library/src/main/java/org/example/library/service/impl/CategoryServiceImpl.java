@@ -1,5 +1,6 @@
 package org.example.library.service.impl;
 
+import org.example.library.dto.CategoryDto;
 import org.example.library.model.Category;
 import org.example.library.model.Product;
 import org.example.library.repository.CategoryRepository;
@@ -61,5 +62,10 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
             throw new RuntimeException("Nie można usunąć kategorii, ponieważ jest powiązana z produktami.");
         }
+    }
+
+    @Override
+    public List<CategoryDto> getCategoryAndProduct() {
+        return categoryRepository.getCategoryAndProduct();
     }
 }

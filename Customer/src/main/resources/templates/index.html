@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Basic -->
+
+<head th:replace="~{fragments/head-fragment :: head-fragment}"></head>
+
+<body>
+<header th:replace="~{fragments/header-fragment :: header-fragment}"></header>
+
+
+<!-- Fish -->
+<div class="products-box">
+
+    <div class="container" th:each="category : ${categories}">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1 th:text="${category.categoryName}"></h1>
+                    <p>Mamy najlepszą muzykę w okolicy!</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="special-menu text-center">
+                    <div class="button-group filter-button-group">
+                        <button class="active" data-filter="*">All</button>
+                        <button data-filter=".best-seller">Best seller</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row special-list">
+            <div class="col-lg-3 col-md-6 special-grid best-seller" th:each="product : ${products}"
+                                                                    th:if="${product.category.categoryName == category.categoryName}">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+                        <img style="max-height: 250px" th:if="${product.image != null}" th:src="'data:image/jpeg;base64,' + ${product.image}">
+                        <img style="max-height: 250px" th:if="${product.image == null}" th:src="'https://media.istockphoto.com/id/1394758946/vector/no-image-raster-symbol-missing-available-icon-no-gallery-for-this-moment-placeholder.jpg?s=170667a&w=0&k=20&c=HMFTtins81JmJWSrFbjs-xNL_W0KXonnGwCWJo5IPp0='">
+
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a th:href="@{/find-product/{id}(id = ${product.id})}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                            </ul>
+                            <a class="cart" href="#">Dodaj do koszyka</a>
+                        </div>
+                    </div>
+                    <div class="why-text">
+                        <h4 th:text="${product.artistName} + ' - ' + ${product.albumTitle}"></h4>
+                        <h5 th:text="${product.price} + ' zł'"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/script :: script}"></div>
+
+</body>
+
+</html>
